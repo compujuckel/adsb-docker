@@ -1,6 +1,7 @@
 version: '3'
 services:
   dump1090-fa:
+    build: ./dump1090-fa
     image: dump1090-fa
     devices:
       - "/dev/bus/usb"
@@ -15,14 +16,16 @@ services:
     ports:
       - "8082:8080"
     environment:
-      - LAT=<insert lat here>
-      - LON=<insert lon here>
+      - LAT=
+      - LON=
   piaware:
+    build: ./piaware
     image: piaware
     environment:
-      - FLIGHTAWARE_USER=<insert username here>
-      - FLIGHTAWARE_PASSWORD=<insert password here>
+      - FLIGHTAWARE_USER=
+      - FLIGHTAWARE_PASSWORD=
   fr24feed:
+    build: ./fr24feed
     image: fr24feed
     environment:
-      - FR24_KEY=<insert fr24 key here>
+      - FR24_KEY=
