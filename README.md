@@ -4,4 +4,11 @@
 Upload ADS-B data from a local rtlsdr receiver to Flightaware and Flightradar24.
 
 ## Configuration
-Replace **FR24_KEY**, **FLIGHTAWARE_USER** and **FLIGHTAWARE_PASSWORD** in docker-compose.yml with their correct values.
+Replace `LAT`, `LON`, `FR24_KEY`, `FLIGHTAWARE_USER` and `FLIGHTAWARE_PASSWORD` in `docker-compose.yml` with their correct values.
+
+**Additionally, you have to blacklist the `dvb_usb_rtl28xxu` module on the host.**  
+To do this, put the following lines into `/etc/modprobe.d/blacklist.conf`:
+```
+blacklist dvb_usb_rtl28xxu
+blacklist rtl2832
+```
