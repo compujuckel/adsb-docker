@@ -16,6 +16,7 @@ FROM debian:stretch
 
 ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005
+ENV RECEIVER_MLAT_PORT 30104
 
 COPY --from=0 piaware_builder/piaware_3.6.3_amd64.deb .
 
