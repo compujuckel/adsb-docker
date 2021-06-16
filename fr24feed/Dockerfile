@@ -6,7 +6,7 @@ RUN apk update && \
 RUN wget https://repo-feed.flightradar24.com/linux_x86_64_binaries/fr24feed_1.0.18-5_amd64.tgz && \
 	tar xvfz fr24feed_1.0.18-5_amd64.tgz
 
-FROM debian:stretch
+FROM debian:buster
 
 ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005

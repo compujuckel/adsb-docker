@@ -1,27 +1,25 @@
-FROM debian:jessie
+FROM debian:buster
 
 RUN apt-get update && \
-	apt-get install -y librtlsdr-dev fakeroot dpkg-dev git debhelper libusb-1.0-0-dev pkg-config dh-systemd libncurses5-dev libusb-1.0-0 build-essential cmake libtecla1 libtecla-dev wget doxygen help2man pandoc
-
-RUN git clone --recursive https://github.com/Nuand/bladeRF.git
-WORKDIR bladeRF
-RUN git checkout tags/2016.06
-RUN dpkg-buildpackage -b
+	apt-get install -y git build-essential fakeroot debhelper librtlsdr-dev pkg-config dh-systemd libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev
 
 WORKDIR /
-RUN dpkg -i libbladerf1_2016.06_amd64.deb libbladerf-dev_2016.06_amd64.deb
 
 RUN git clone https://github.com/flightaware/dump1090.git
 WORKDIR dump1090
-RUN dpkg-buildpackage -b
+RUN ./prepare-build.sh buster package-buster
 
-FROM debian:jessie
-COPY --from=0 libbladerf1_2016.06_amd64.deb .
-COPY --from=0 dump1090-fa_3.6.3_amd64.deb .
+WORKDIR package-buster
+RUN dpkg-buildpackage -b --no-sign
+RUN ls -la ..
+RUN mv ../dump1090-fa_*_amd64.deb ../dump1090-fa.deb
+
+FROM debian:buster
+COPY --from=0 dump1090/dump1090-fa.deb .
 
 RUN apt-get update && \
-	apt-get install -y librtlsdr0 libusb-1.0-0 init-system-helpers lighttpd supervisor
-RUN dpkg -i libbladerf1_2016.06_amd64.deb dump1090-fa_3.6.3_amd64.deb
+	apt-get install -y librtlsdr0 libusb-1.0-0 init-system-helpers lighttpd supervisor libbladerf1 libhackrf0 liblimesuite18.06-1 libncurses6
+RUN dpkg -i dump1090-fa.deb
 RUN mkdir -p /run/dump1090-fa
 
 ADD supervisor /etc/supervisor
